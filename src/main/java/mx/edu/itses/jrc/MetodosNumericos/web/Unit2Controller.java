@@ -3,6 +3,7 @@ package mx.edu.itses.jrc.MetodosNumericos.web;
 
 import lombok.extern.slf4j.Slf4j;
 import mx.edu.itses.jrc.MetodosNumericos.domain.Biseccion;
+import mx.edu.itses.jrc.MetodosNumericos.domain.ReglaFalsa;
 import mx.edu.itses.jrc.MetodosNumericos.services.Funciones;
 import mx.edu.itses.jrc.MetodosNumericos.services.UnidadIIService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class Unit2Controller {
  @Autowired
  private UnidadIIService bisectionservice;
-    
+ @Autowired
+ private UnidadIIService reglafalsaservice;
     @GetMapping("unit2/formbisection")
     public String formBisection(Model model){
         
@@ -43,4 +45,22 @@ public class Unit2Controller {
     return "unit2/bisection/solvebisection";
     }
     
+ @GetMapping("unit2/formreglafalsa")
+ public String formReglaFalsa(Model model){
+ 
+ ReglaFalsa reglafalsa = new ReglaFalsa();
+ 
+ model.addAttribute("reglafalsa", reglafalsa);
+ 
+ return "unit2/reglafalsa/formreglafalsa";
+ }
+ 
+ @PostMapping("unit2/solvereglafalsa")
+ public String solvereglafalsa(ReglaFalsa reglafalsa, Model model){
+ var solveReglaFalsa = reglafalsaservice.AlgoritmoReglaFalsa(reglafalsa);
+ 
+ log.info("Arreglo " + solveReglaFalsa);
+ model.addAttribute("solveReglaFalsa", solveReglaFalsa);
+ return "unit2/reglafalsa/solvereglafalsa";
+ }
 }
