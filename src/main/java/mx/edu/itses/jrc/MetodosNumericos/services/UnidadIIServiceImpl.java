@@ -3,6 +3,7 @@ package mx.edu.itses.jrc.MetodosNumericos.services;
 import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
 import mx.edu.itses.jrc.MetodosNumericos.domain.Biseccion;
+import mx.edu.itses.jrc.MetodosNumericos.domain.PuntoFijo;
 import mx.edu.itses.jrc.MetodosNumericos.domain.ReglaFalsa;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class UnidadIIServiceImpl implements UnidadIIService {
 
     @Override
-    public ArrayList<Biseccion> AlgoritmoBiseccion(Biseccion biseccion){
+    public ArrayList<Biseccion> AlgoritmoBiseccion(Biseccion biseccion) {
         ArrayList<Biseccion> respuesta = new ArrayList<>();
         double XL, XU, XRa, XRn, FXL, FXU, FXR, Ea;
 
@@ -63,61 +64,100 @@ public class UnidadIIServiceImpl implements UnidadIIService {
 
     @Override
     public ArrayList<ReglaFalsa> AlgoritmoReglaFalsa(ReglaFalsa reglafalsa) {
- ArrayList<ReglaFalsa> respuesta = new ArrayList<>();
-    double XL, XU, XRa, XRn, FXL, FXU, FXR, Ea;
+        ArrayList<ReglaFalsa> respuesta = new ArrayList<>();
+        double XL, XU, XRa, XRn, FXL, FXU, FXR, Ea;
 
-    XL = reglafalsa.getXL();
-    XU = reglafalsa.getXU();
-    XRa = 0;
-    Ea = 100;
+        XL = reglafalsa.getXL();
+        XU = reglafalsa.getXU();
+        XRa = 0;
+        Ea = 100;
 
-    // Verificamos que en el intervalo definido haya un cambio de signo
-    FXL = Funciones.Ecuacion(reglafalsa.getFX(), XL);
-    FXU = Funciones.Ecuacion(reglafalsa.getFX(), XU);
-    if (FXL * FXU < 0) {
-        for (int i = 1; i <= reglafalsa.getIteracionesMaximas(); i++) {
-            FXL = Funciones.Ecuacion(reglafalsa.getFX(), XL);
-            FXU = Funciones.Ecuacion(reglafalsa.getFX(), XU);
-            XRn = XU - ((FXU * (XL - XU)) / (FXL - FXU));
-            FXR = Funciones.Ecuacion(reglafalsa.getFX(), XRn);
+        // Verificamos que en el intervalo definido haya un cambio de signo
+        FXL = Funciones.Ecuacion(reglafalsa.getFX(), XL);
+        FXU = Funciones.Ecuacion(reglafalsa.getFX(), XU);
+        if (FXL * FXU < 0) {
+            for (int i = 1; i <= reglafalsa.getIteracionesMaximas(); i++) {
+                FXL = Funciones.Ecuacion(reglafalsa.getFX(), XL);
+                FXU = Funciones.Ecuacion(reglafalsa.getFX(), XU);
+                XRn = XU - ((FXU * (XL - XU)) / (FXL - FXU));
+                FXR = Funciones.Ecuacion(reglafalsa.getFX(), XRn);
 
-            if (i != 1) {
-                Ea = Funciones.ErrorRelativo(XRn, XRa);
+                if (i != 1) {
+                    Ea = Funciones.ErrorRelativo(XRn, XRa);
+                }
+
+                ReglaFalsa renglon = new ReglaFalsa();
+                renglon.setXL(XL);
+                renglon.setXU(XU);
+                renglon.setXR(XRn);
+                renglon.setFXL(FXL);
+                renglon.setFXU(FXU);
+                renglon.setFXR(FXR);
+                renglon.setEa(Ea);
+
+                respuesta.add(renglon);
+
+                // Verifica el signo para actualizar los límites
+                if (FXL * FXR < 0) {
+                    XU = XRn;
+                } else if (FXL * FXR > 0) {
+                    XL = XRn;
+                } else {
+                    break; // raíz exacta encontrada
+                }
+
+                XRa = XRn;
+
+                if (Ea <= reglafalsa.getEa()) {
+                    break; // error aceptable alcanzado
+                }
             }
-
+        } else {
             ReglaFalsa renglon = new ReglaFalsa();
-            renglon.setXL(XL);
-            renglon.setXU(XU);
-            renglon.setXR(XRn);
-            renglon.setFXL(FXL);
-            renglon.setFXU(FXU);
-            renglon.setFXR(FXR);
-            renglon.setEa(Ea);
-
+            //renglon.setIntervaloInvalido(true);
             respuesta.add(renglon);
-
-            // Verifica el signo para actualizar los límites
-            if (FXL * FXR < 0) {
-                XU = XRn;
-            } else if (FXL * FXR > 0) {
-                XL = XRn;
-            } else {
-                break; // raíz exacta encontrada
-            }
-
-            XRa = XRn;
-
-            if (Ea <= reglafalsa.getEa()) {
-                break; // error aceptable alcanzado
-            }
         }
-    } else {
-        ReglaFalsa renglon = new ReglaFalsa();
-        //renglon.setIntervaloInvalido(true);
-        respuesta.add(renglon);
+
+        return respuesta;
     }
 
-    return respuesta;
+    @Override
+    public ArrayList<PuntoFijo> AlgoritmoPuntoFijo(PuntoFijo puntofijo) {
+        ArrayList<PuntoFijo> respuesta = new ArrayList<>();
+        double Xi = puntofijo.getXi(); // Valor inicial
+        double Xn;                     // Valor siguiente
+        double Ea = 100;               // Error aproximado
+        int maxIteraciones = puntofijo.getIteracionesMaximas();
+
+        for (int i = 1; i <= maxIteraciones; i++) {
+            // Calcular Xn = g(Xi)
+            Xn = Funciones.Ecuacion(puntofijo.getGX(), Xi);
+
+            // Calcular error relativo
+            
+            Ea = Funciones.ErrorRelativo(Xn, Xi);
+            
+          double gx = Funciones.Ecuacion(puntofijo.getGX(), Xi); // Evaluamos la función en Xi
+
+            // Guardar los datos de la iteración
+            PuntoFijo iteracion = new PuntoFijo();
+            iteracion.setXi(Xi); // El nuevo valor Xi para mostrar
+            iteracion.setGX(String.valueOf(gx));
+            iteracion.setEa(Ea);
+            iteracion.setIteracionesMaximas(i); // Guardamos el número de iteración actual
+
+            respuesta.add(iteracion);
+
+            // Comprobar si el error ya es aceptable
+            if (Ea <= puntofijo.getEa()) {
+                break;
+            }
+
+            // Actualizar Xi para la siguiente iteración
+            Xi = Xn;
+        }
+
+        return respuesta;
     }
 
 }
