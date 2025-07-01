@@ -3,6 +3,7 @@ package mx.edu.itses.jrc.MetodosNumericos.services;
 import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
 import mx.edu.itses.jrc.MetodosNumericos.domain.Biseccion;
+import mx.edu.itses.jrc.MetodosNumericos.domain.NewtonRaphson;
 import mx.edu.itses.jrc.MetodosNumericos.domain.PuntoFijo;
 import mx.edu.itses.jrc.MetodosNumericos.domain.ReglaFalsa;
 import org.springframework.stereotype.Service;
@@ -134,10 +135,9 @@ public class UnidadIIServiceImpl implements UnidadIIService {
             Xn = Funciones.Ecuacion(puntofijo.getGX(), Xi);
 
             // Calcular error relativo
-            
             Ea = Funciones.ErrorRelativo(Xn, Xi);
-            
-          double gx = Funciones.Ecuacion(puntofijo.getGX(), Xi); // Evaluamos la función en Xi
+
+            double gx = Funciones.Ecuacion(puntofijo.getGX(), Xi); // Evaluamos la función en Xi
 
             // Guardar los datos de la iteración
             PuntoFijo iteracion = new PuntoFijo();
@@ -158,6 +158,50 @@ public class UnidadIIServiceImpl implements UnidadIIService {
         }
 
         return respuesta;
+    }
+
+    @Override
+    public ArrayList<NewtonRaphson> AlgoritmoNewtonRaphson(NewtonRaphson newtonraphson) {
+        ArrayList<NewtonRaphson> respuesta = new ArrayList<>();
+
+        double Xi = newtonraphson.getXi(); // valor inicial
+        double Xi1 = 0;           // siguiente Xi
+        double Ea = 100;            // error inicial
+        double h = 0.0001; // paso pequeño para aproximar derivada
+
+        int maxIteraciones = newtonraphson.getIteracionesMaximas();
+
+        for (int i = 1; i <= maxIteraciones; i++) {
+            double FXi = Funciones.Ecuacion(newtonraphson.getFX(), Xi);
+            double FdXi = (Funciones.Ecuacion(newtonraphson.getFX(), Xi + h) - FXi) / h; 
+            if (FdXi == 0) {
+                System.out.println("Derivada cercana a cero, deteniendo iteración");
+                break;
+            }
+            // Xi+1
+            Xi1 = Xi - (FXi / FdXi);
+
+            // Calcular el error relativo aproximado
+            Ea = Funciones.ErrorRelativo(Xi1, Xi);
+
+            // Guardar datos de la iteración
+            NewtonRaphson iteracion = new NewtonRaphson();
+            iteracion.setXi(Xi);
+            iteracion.setFXi(FXi);
+            iteracion.setDFXi(String.valueOf(FdXi));
+            iteracion.setXi1(Xi1);
+            iteracion.setEa(Ea);
+            iteracion.setIteracionesMaximas(i);
+
+            respuesta.add(iteracion);
+
+            // Verificar si el error ya está por debajo del deseado
+            // Preparar para siguiente iteración
+            Xi = Xi1;
+        }
+
+        return respuesta;
+
     }
 
 }
