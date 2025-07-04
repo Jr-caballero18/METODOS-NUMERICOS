@@ -6,6 +6,8 @@ import mx.edu.itses.jrc.MetodosNumericos.domain.Biseccion;
 import mx.edu.itses.jrc.MetodosNumericos.domain.NewtonRaphson;
 import mx.edu.itses.jrc.MetodosNumericos.domain.PuntoFijo;
 import mx.edu.itses.jrc.MetodosNumericos.domain.ReglaFalsa;
+import mx.edu.itses.jrc.MetodosNumericos.domain.Secante;
+import mx.edu.itses.jrc.MetodosNumericos.domain.SecanteModificado;
 
 
 public interface UnidadIIService {
@@ -18,6 +20,9 @@ public interface UnidadIIService {
  
    public ArrayList<NewtonRaphson> AlgoritmoNewtonRaphson(NewtonRaphson newtonraphson);
 
-      
+   public ArrayList<Secante> AlgoritmoSecante(Secante secante);
+
+  public ArrayList<SecanteModificado> AlgoritmoSecanteModificado(SecanteModificado secantemodificado);
+   
 } 
 
