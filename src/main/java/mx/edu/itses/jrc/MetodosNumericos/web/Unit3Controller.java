@@ -1,0 +1,70 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package mx.edu.itses.jrc.MetodosNumericos.web;
+
+import mx.edu.itses.jrc.MetodosNumericos.domain.ReglaCramer;
+import mx.edu.itses.jrc.MetodosNumericos.services.UnidadIIIService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+
+
+/**
+ *
+ * @author juras
+ */
+@Controller
+@Slf4j
+public class Unit3Controller {
+@Autowired
+private  UnidadIIIService unidadIIIsrv;
+
+
+    @GetMapping("/unit3")
+    public String index(Model model) {
+        return "unit3/index";
+    }
+
+    @GetMapping("/unit3/formcramer")
+    public String formCramer(Model model) {
+        ReglaCramer modelCramer = new ReglaCramer();
+        model.addAttribute("modelCramer", modelCramer);
+
+        return "unit3/cramer/formcramer";
+    }
+    
+    @PostMapping("/unit3/solvecramer")
+    public String solveCramer(ReglaCramer modelCramer, Errors errores, Model model){
+    //log.info("OBJECTOS:" + modelCramer);
+    
+    var solveCramer = unidadIIIsrv.AlgoritmoReglaCramer(modelCramer);
+    //log.info("Solucion: " + solveCramer.getVectorX());
+    model.addAttribute("solveCramer", solveCramer);
+    
+    /*log.info("Determinantes: " + solveCramer.getDeterminantes());
+    
+    */
+        return "unit3/cramer/solvecramer";
+    }
+    
+    @GetMapping("/unit3/formgauss")
+public String formGauss(Model model) {
+    model.addAttribute("modelGauss", new mx.edu.itses.jrc.MetodosNumericos.domain.Gauss());
+    return "unit3/gauss/formgauss";
+}
+
+@PostMapping("/unit3/solvegauss")
+public String solveGauss(mx.edu.itses.jrc.MetodosNumericos.domain.Gauss modelGauss,
+                         Errors errores,
+                         Model model) {
+    var solveGauss = unidadIIIsrv.AlgoritmoGauss(modelGauss);
+    model.addAttribute("solveGauss", solveGauss);
+    return "unit3/gauss/solvegauss";
+}
+}

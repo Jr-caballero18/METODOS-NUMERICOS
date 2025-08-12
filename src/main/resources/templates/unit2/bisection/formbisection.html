@@ -21,68 +21,70 @@
         ></script>
     </head>
     <body>
-        <nav class="navbar navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">
-                    <img th:src="@{/images/logo.itses.png}"
-                         witdth="125" height="38" 
-                         class="d-inline-block align-top"/>
-                    METODOS NUMERICOS
-                </a>
+        
 
-            </div>
-        </nav> 
+        <nav th:replace="/layout/template :: menu"></nav> 
+        <div th:replace="/layout/template :: bannerunit2"></div>
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                    <li class="breadcrumb-item active" href="/unit2">Solucion Ecuaciones</li>
+                    <li class="breadcrumb-item active" aria-current="page">Formulario Biseccion </li>
+                </ol>
+            </nav>
+        </div>
 
         <div class="container">
             <h1 class="text">Metodo de Biseccion</h1>
         </div>
 
         <form class="row g-3" th:action="@{/unit2/solvebisection}" method="post" th:object="${bisection}">
-            
-        <div class="container p-4 mt-4 rounded" style="background-color: #f8f9fa;">
-            <h2 class="text-center mb-4">Ingrese los valores</h2>
 
-            <div class="row g-3 justify-content-center">
-                
-                <div class="col-md-6 col-lg-4">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="FX" placeholder="FX" th:field="*{FX}">
-                        <label for="FX">Funcion</label>
+            <div class="container p-4 mt-4 rounded" style="background-color: #f8f9fa;">
+                <h2 class="text-center mb-4">Ingrese los valores</h2>
+
+                <div class="row g-3 justify-content-center">
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="FX" placeholder="FX" th:field="*{FX}">
+                            <label for="FX">Funcion</label>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="col-md-6 col-lg-4">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="IteracionesMaximas" placeholder="Iteraciones Máximas" th:field="*{IteracionesMaximas}">
-                        <label for="IteracionesMaximas">Iteraciones Máximas</label>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="IteracionesMaximas" placeholder="Iteraciones Máximas" th:field="*{IteracionesMaximas}">
+                            <label for="IteracionesMaximas">Iteraciones Máximas</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="form-floating">
+                            <input type="text" step="any" class="form-control" id="XL" placeholder="XL" th:field="*{XL}">
+                            <label for="XL">XL</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="form-floating">
+                            <input type="text" step="any" class="form-control" id="XU" placeholder="XU" th:field="*{XU}">
+                            <label for="XU">XU</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="form-floating">
+                            <input type="text" step="any" class="form-control" id="Ea" placeholder="Ea" th:field="*{Ea}">
+                            <label for="Ea">Error estimado</label>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="form-floating">
-                        <input type="text" step="any" class="form-control" id="XL" placeholder="XL" th:field="*{XL}">
-                        <label for="XL">XL</label>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-4">
-                    <div class="form-floating">
-                        <input type="text" step="any" class="form-control" id="XU" placeholder="XU" th:field="*{XU}">
-                        <label for="XU">XU</label>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="form-floating">
-                        <input type="text" step="any" class="form-control" id="Ea" placeholder="Ea" th:field="*{Ea}">
-                        <label for="Ea">Error estimado</label>
-                    </div>
+                <div class="d-flex justify-content-center mt-4">
+                    <button type="submit" class="btn btn-primary px-4">Calcular</button>
                 </div>
             </div>
-
-            <div class="d-flex justify-content-center mt-4">
-                <button type="submit" class="btn btn-primary px-4">Calcular</button>
-            </div>
-        </div>
         </form>
 
     </body>
