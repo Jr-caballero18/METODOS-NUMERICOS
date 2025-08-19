@@ -12,6 +12,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import lombok.extern.slf4j.Slf4j;
+import mx.edu.itses.jrc.MetodosNumericos.domain.Gauss;
+import mx.edu.itses.jrc.MetodosNumericos.domain.GaussJordan;
 import org.springframework.stereotype.Controller;
 
 
@@ -55,16 +57,36 @@ private  UnidadIIIService unidadIIIsrv;
     
     @GetMapping("/unit3/formgauss")
 public String formGauss(Model model) {
-    model.addAttribute("modelGauss", new mx.edu.itses.jrc.MetodosNumericos.domain.Gauss());
+    Gauss modelGauss = new Gauss();
+    
+    model.addAttribute("modelGauss", modelGauss);
     return "unit3/gauss/formgauss";
 }
 
 @PostMapping("/unit3/solvegauss")
-public String solveGauss(mx.edu.itses.jrc.MetodosNumericos.domain.Gauss modelGauss,
+public String solveGauss(Gauss modelGauss,
                          Errors errores,
                          Model model) {
     var solveGauss = unidadIIIsrv.AlgoritmoGauss(modelGauss);
     model.addAttribute("solveGauss", solveGauss);
     return "unit3/gauss/solvegauss";
 }
+
+@GetMapping("/unit3/formgaussjordan")
+public String formGaussJordan(Model model) {
+    GaussJordan modelGJ = new GaussJordan();
+    model.addAttribute("modelGJ",modelGJ );
+    return "unit3/gaussjordan/formgaussjordan";
+}
+
+@PostMapping("/unit3/solvegaussjordan")
+public String solveGaussJordan(GaussJordan modelGJ,
+                               Errors errores,
+                               Model model) {
+    var solveGJ = unidadIIIsrv.AlgoritmoGaussJordan(modelGJ);
+    model.addAttribute("solveGJ", solveGJ);
+    return "unit3/gaussjordan/solvegaussjordan";
+}
+
+
 }

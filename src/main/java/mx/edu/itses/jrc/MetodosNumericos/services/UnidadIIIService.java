@@ -5,6 +5,7 @@
 package mx.edu.itses.jrc.MetodosNumericos.services;
 
 import mx.edu.itses.jrc.MetodosNumericos.domain.Gauss;
+import mx.edu.itses.jrc.MetodosNumericos.domain.GaussJordan;
 import mx.edu.itses.jrc.MetodosNumericos.domain.ReglaCramer;
 
 
@@ -14,4 +15,8 @@ public interface UnidadIIIService {
     public ReglaCramer AlgoritmoReglaCramer(ReglaCramer modelCramer);
     
     public Gauss AlgoritmoGauss(Gauss modelGauss);
+    
+    public GaussJordan AlgoritmoGaussJordan(GaussJordan modelGJ);
+    
+    
 }
