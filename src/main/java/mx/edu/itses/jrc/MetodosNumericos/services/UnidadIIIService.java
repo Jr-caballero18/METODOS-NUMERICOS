@@ -6,6 +6,8 @@ package mx.edu.itses.jrc.MetodosNumericos.services;
 
 import mx.edu.itses.jrc.MetodosNumericos.domain.Gauss;
 import mx.edu.itses.jrc.MetodosNumericos.domain.GaussJordan;
+import mx.edu.itses.jrc.MetodosNumericos.domain.GaussSeidel;
+import mx.edu.itses.jrc.MetodosNumericos.domain.Jacobi;
 import mx.edu.itses.jrc.MetodosNumericos.domain.ReglaCramer;
 
 
@@ -18,5 +20,7 @@ public interface UnidadIIIService {
     
     public GaussJordan AlgoritmoGaussJordan(GaussJordan modelGJ);
     
+    public Jacobi AlgoritmoJacobi(Jacobi modelJacobi);
     
+    public GaussSeidel AlgoritmoGaussSeidel(GaussSeidel modelGS);
 }
