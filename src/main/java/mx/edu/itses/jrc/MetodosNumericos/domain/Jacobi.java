@@ -7,10 +7,7 @@ package mx.edu.itses.jrc.MetodosNumericos.domain;
 import java.util.ArrayList;
 import lombok.Data;
 
-/**
- *
- * @author juras
- */
+
 @Data
 public class Jacobi {
  private Integer MN;                       
